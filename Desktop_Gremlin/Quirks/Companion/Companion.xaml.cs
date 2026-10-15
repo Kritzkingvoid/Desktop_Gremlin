@@ -34,13 +34,26 @@ namespace DesktopGremlin.Quirks.Companion
         public Companion()
         {
             InitializeComponent();
-            InitializeCompanion();
+            Closed += (s, e) =>
+            {
+                _animationController?.Stop();
+                _followController?.Stop();
+            };
+            try
+            {
+                InitializeCompanion();
+            }
+            catch (CharacterPackException)
+            {
+                Close();
+                throw;
+            }
         }
 
         private void InitializeCompanion()
         {
-            SpriteImage.Source = new CroppedBitmap();
             FrameCounts.LoadConfigCompanion(QuirkSettings.CompanionChar);
+            SpriteImage.Source = SpriteManagerCompanion.Initialize(FrameCounts);
             GremlinState.LockState();
 
             ApplyScaling();

@@ -211,8 +211,9 @@ using static ConfigManager;
         {
             double newLeft = _gremlin.Left + _keyboardMoveSpeedX;
             double newTop = _gremlin.Top + _keyboardMoveSpeedY;
-            newLeft = Math.Max(SystemParameters.WorkArea.Left, Math.Min(newLeft, SystemParameters.WorkArea.Right - _gremlin.SpriteImage.ActualWidth));
-            newTop = Math.Max(SystemParameters.WorkArea.Top, Math.Min(newTop, SystemParameters.WorkArea.Bottom - _gremlin.SpriteImage.ActualHeight));
+            MovementBounds workArea = MonitorWorkArea.GetFor(_gremlin);
+            newLeft = workArea.ClampLeft(newLeft, _gremlin.SpriteImage.ActualWidth);
+            newTop = workArea.ClampTop(newTop, _gremlin.SpriteImage.ActualHeight);
             _gremlin.Left = newLeft;
             _gremlin.Top = newTop;
 
@@ -310,7 +311,7 @@ using static ConfigManager;
                 2 - Emote 3 
                 3 - Emote 2 
                 4 - Emote 4 
-                4 - Un/Summon Companion
+                5 - Un/Summon Companion
             HELP:
                 F1 - Show this help
                 X - Close Program

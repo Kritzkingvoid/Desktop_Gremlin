@@ -67,7 +67,7 @@ namespace DesktopGremlin
 
             currentFrame = SpriteManagerCompanion.PlayAnimation(stateName, folder, currentFrame, frameCount, _spriteImage);
 
-            if (resetOnEnd && currentFrame == 0)
+            if (currentFrame == -1 || (resetOnEnd && currentFrame == 0))
             {
                 _gremlinState.UnlockState();
                 _gremlinState.ResetAllExceptIdle();

@@ -1,0 +1,33 @@
+name: Build and regression checks
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  regression:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+      - name: Run config and geometry regressions
+        run: dotnet run --project tests/DesktopGremlin.RegressionTests -c Release -f net8.0
+      - name: Run regressions on the app's .NET Framework runtime
+        if: runner.os == 'Windows'
+        run: dotnet run --project tests/DesktopGremlin.RegressionTests -c Release -f net48
+      - uses: microsoft/setup-msbuild@v2
+        if: runner.os == 'Windows'
+      - name: Build the WPF app
+        if: runner.os == 'Windows'
+        run: msbuild Desktop_Gremlin.sln /m /p:Configuration=Release
+      - name: Exercise real WPF assets, startup failures and companion isolation
+        if: runner.os == 'Windows'
+        run: dotnet run --project tests/DesktopGremlin.WindowsTests -c Release

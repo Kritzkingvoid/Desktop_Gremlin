@@ -35,10 +35,9 @@ namespace DesktopGremlin
             double moveX = (_rng.NextDouble() - 0.5) * Settings.MoveDistance * 2;
             double moveY = (_rng.NextDouble() - 0.5) * Settings.MoveDistance * 2;
 
-            double targetLeft = Math.Max(SystemParameters.WorkArea.Left,
-                Math.Min(_window.Left + moveX, SystemParameters.WorkArea.Right - _spriteImage.ActualWidth));
-            double targetTop = Math.Max(SystemParameters.WorkArea.Top,
-                Math.Min(_window.Top + moveY, SystemParameters.WorkArea.Bottom - _spriteImage.ActualHeight));
+            MovementBounds workArea = MonitorWorkArea.GetFor(_window);
+            double targetLeft = workArea.ClampLeft(_window.Left + moveX, _spriteImage.ActualWidth);
+            double targetTop = workArea.ClampTop(_window.Top + moveY, _spriteImage.ActualHeight);
 
             int step = Settings.WalkDistance;
             double dx = (targetLeft - _window.Left) / step;

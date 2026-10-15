@@ -71,17 +71,14 @@ namespace DesktopGremlin
         private void Gravity_Tick(object sender, EventArgs e)
         {
 
-            double bottomLimit = SystemParameters.WorkArea.Bottom - _window.SpriteImage.ActualHeight;
 
             if (_gremlinState.GetState("Grab"))
             {
                 return;
             }
 
-            if (_window.Top + 5 < bottomLimit)
-            {
-                _window.Top += Settings.SvGravity;
-            }
+            MovementBounds workArea = MonitorWorkArea.GetFor(_window);
+            _window.Top = workArea.Fall(_window.Top, _window.SpriteImage.ActualHeight, Settings.SvGravity);
         }
     }
 }

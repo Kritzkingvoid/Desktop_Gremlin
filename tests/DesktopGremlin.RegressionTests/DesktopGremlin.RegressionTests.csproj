@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFrameworks>net8.0</TargetFrameworks>
+    <TargetFrameworks Condition="'$(OS)' == 'Windows_NT'">net8.0;net48</TargetFrameworks>
+    <LangVersion>7.3</LangVersion>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <Nullable>disable</Nullable>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System.Drawing" Condition="'$(TargetFramework)' == 'net48'" />
+    <Compile Include="../../Desktop_Gremlin/ConfigManagers/ConfigNumbers.cs" Link="ConfigNumbers.cs" />
+    <Compile Include="../../Desktop_Gremlin/ConfigManagers/ConfigSettings.cs" Link="ConfigSettings.cs" />
+    <Compile Include="../../Desktop_Gremlin/Frames/CharacterPack.cs" Link="CharacterPack.cs" />
+    <Compile Include="../../Desktop_Gremlin/Frames/SpriteSheetLayout.cs" Link="SpriteSheetLayout.cs" />
+    <Compile Include="../../Desktop_Gremlin/Frames/PackDiagnostics.cs" Link="PackDiagnostics.cs" />
+    <Compile Include="../../Desktop_Gremlin/Frames/FrameCounts.cs" Link="FrameCounts.cs" />
+    <Compile Include="../../Desktop_Gremlin/GlobalVar/SpriteVariables.cs" Link="SpriteVariables.cs" />
+    <Compile Include="../../Desktop_Gremlin/MainWindowController/MovementBounds.cs" Link="MovementBounds.cs" />
+  </ItemGroup>
+</Project>

@@ -85,7 +85,7 @@ namespace DesktopGremlin
                 _gremlinState.ResetAllExceptIdle();
             }
 
-            if (resetOnEnd && currentFrame == 0 && stateName == "Outro")
+            if (resetOnEnd && (currentFrame == 0 || currentFrame == -1) && stateName == "Outro")
             {
                 Application.Current.Shutdown();
             }

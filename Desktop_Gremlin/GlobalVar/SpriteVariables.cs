@@ -1,10 +1,7 @@
-﻿using System.Data.SqlTypes;
-using System.Diagnostics.Eventing.Reader;
-
-public static class Settings
+﻿public static class Settings
 {
     public static int SpriteColumn { get; set; } = 0;
-    public static int FrameRate { get; set; } = 0;
+    public static int FrameRate { get; set; } = 60;
     public static int FrameWidth { get; set; } = 0;
     public static int FrameHeight { get; set; } = 0;
     public static int FrameWidthJs { get; set; } = 0;
@@ -18,11 +15,11 @@ public static class Settings
     public static int CurrendIdle { get; set; } = 0;
     public static int ItemWidth { get; set; } = 0;
     public static int ItemHeight { get; set; } = 0;
-    public static int WalkDistance { get; set; } = 0;
+    public static int WalkDistance { get; set; } = 200;
     public static int SpawnDistance { get; set; } = 0;
     public static double FollowRadius { get; set; } = 0;
     public static double SpriteSize { get; set; } = 1.0;
-    public static double CompanionScale { get; set; } = 0;
+    public static double CompanionScale { get; set; } = 1.0;
     public static double VolumeLevel { get; set; } = 1.0;
     public static double SvGravity { get; set; } = 10.0;
     public static string StartingChar { get; set; } = "";
@@ -55,7 +52,8 @@ public static class QuirkSettings
     public static double ItemAcceleration { get; set; } = 1.0;
     public static double CurrentItemAcceleration { get; set; } = 1.0;
     public static string CompanionChar { get; set; } = "";
-    public static double CompanionScale { get; set; } = 0;
+    public static double CompanionScale { get; set; } = 1.0;
+    public static int CompanionColumn { get; set; } = 10;
     public static int CompanionHeight { get; set; } = 0;    
     public static int CompanionWidth { get; set; } = 0;   
     public static int CompanionFollow { get; set; } = 0;

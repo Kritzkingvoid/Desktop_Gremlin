@@ -1,7 +1,4 @@
-﻿using DesktopGremlin;
-using System;
-using System.Globalization;
-using System.IO;
+﻿using System.IO;
 public class FrameCounts
 {
     public int LeftFire { get; set; } = 0;
@@ -40,15 +37,10 @@ public class FrameCounts
 
     public void LoadConfigChar(string character)
     {
-        string path = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory,"SpriteSheet", "Gremlins",character, "config.txt");
+        string path = Path.Combine(CharacterPack.GetDirectory("Gremlins", character), "config.txt");
+        string[] lines = CharacterPack.ReadConfig(path, false);
 
-        if (!File.Exists(path))
-        {
-            MainWindow.ErrorClose("Cannot find the SpriteSheet config.txt", "Missing config.txt", true);
-            return;
-        }
-
-        foreach (var line in File.ReadAllLines(path))
+        foreach (var line in lines)
         {
             if (string.IsNullOrWhiteSpace(line) || !line.Contains("="))
                 continue;
@@ -58,23 +50,24 @@ public class FrameCounts
             if (parts.Length != 2)
                 continue;
 
-            string key = parts[0].Trim();
+            string key = parts[0].Trim().ToUpperInvariant();
             string value = parts[1].Trim();
 
             if(key == "SCALE")
             {
-                if (TryParseDoubleInvariant(value, out double spriteScale))
+                if (ConfigNumbers.TryParseScale(value, out double spriteScale))
                 {
                     Settings.SpriteSize = spriteScale;
                 }
             }
 
-            if (!int.TryParse(value, out int intValue))
+            if (!ConfigNumbers.TryParseInt(value, out int intValue) || intValue < 0
+                || ((key == "WIDTH" || key == "HEIGHT" || key == "COLUMN") && intValue == 0))
             {
                 continue;
             }
 
-            switch (key.ToUpper())
+            switch (key)
             {
                 case "INTRO": Intro = intValue; break;
                 case "IDLE": Idle = intValue; break;
@@ -115,15 +108,11 @@ public class FrameCounts
     }
     public void LoadConfigCompanion(string character)
     {
-        string path = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "SpriteSheet","Companions" ,character, "config.txt");
+        string path = Path.Combine(CharacterPack.GetDirectory("Companions", character), "config.txt");
+        string[] lines = CharacterPack.ReadConfig(path, true);
+        QuirkSettings.CompanionColumn = 10;
 
-        if (!File.Exists(path))
-        {
-            MainWindow.ErrorClose("Cannot find the SpriteSheet config.txt", "Missing config.txt", true);
-            return;
-        }
-
-        foreach (var line in File.ReadAllLines(path))
+        foreach (var line in lines)
         {
             if (string.IsNullOrWhiteSpace(line) || !line.Contains("="))
                 continue;
@@ -133,15 +122,16 @@ public class FrameCounts
             if (parts.Length != 2)
                 continue;
 
-            string key = parts[0].Trim();
+            string key = parts[0].Trim().ToUpperInvariant();
             string value = parts[1].Trim();
 
-            if (!int.TryParse(value, out int intValue))
+            if (!ConfigNumbers.TryParseInt(value, out int intValue) || intValue < 0
+                || ((key == "WIDTH" || key == "HEIGHT" || key == "COLUMN") && intValue == 0))
             {
                 continue;
             }
 
-            switch (key.ToUpper())
+            switch (key)
             {
                 case "INTRO": Intro = intValue; break;
                 case "IDLE": Idle = intValue; break;
@@ -175,18 +165,12 @@ public class FrameCounts
                 case "JUMPSCARE": JumpScare = intValue; break;
                 case "WIDTH": QuirkSettings.CompanionWidth = intValue; break;
                 case "HEIGHT": QuirkSettings.CompanionHeight = intValue; break;
+                case "COLUMN": QuirkSettings.CompanionColumn = intValue; break;
             }
         }
     }
     public static bool TryParseDoubleInvariant(string input, out double result)
     {
-        if (Settings.LanguageDiff)
-        {
-            return double.TryParse(input, System.Globalization.NumberStyles.Any, CultureInfo.InvariantCulture, out result);
-        }
-        else
-        {
-            return double.TryParse(input, out result);
-        }
+        return ConfigNumbers.TryParseDouble(input, out result);
     }
 }
